@@ -1,0 +1,91 @@
+Enjoy the restaurants demo application.  This is meant to show how to add
+some of advanced features of the Facebook Platform to your current application.
+Create an API key, point it to this code, and start playing.
+
+---------------------------------------
+CODE ORGANIZATION:
+
+demo_libs/facebook-platform/
+  The usual PHP5 client downloaded from developers.facebook.com/resources.php.
+
+demo_libs/ 
+  Libraries for display and data access
+
+images/
+  Some star images for the AJAX component.
+
+migrate/
+  Tools to give you some data for your MySQL database to get started, and to
+  move this data over in under a minute to the Facebook Data API.
+
+index.php
+  The entrypoint for most of the application.
+
+ajax_rate.php
+  If AJAX turned on, this is the endpoint that the AJAX call hits on the
+  backend to add user ratings.
+
+---------------------------------------
+SETUP
+
+1. Put this code under your web root.   
+
+2. Go to your mysql instance and add a database called 'restaurant_demo'
+3. Insert sample restaurant profile info into this database with this command:
+  mysql restaurant_demo < migrate/mysqldump_advanced_demo
+
+  This will also create a table called restaurant_user where your (and your friends')
+  ratings will go.  No user restaurant ratings are provided in the mysql dump.
+4. Set up the API key and secret key using the Developers app on Facebook.
+  http://www.facebook.com/developers/apps.php.
+5. Change demo_libs/config.php to reflect your APP_ROOT_URL
+   (e.g. http://apps.facebook.com/my_restaurant_app) 
+5. Change demo_libs/config.php to reflect your CODE_ROOT_URL
+   (e.g. http://my.server/path_to_this_package) 
+
+   Note that ajax_rate.php should be under this.
+6. Add the appropriate IP, user name, password, and database name to the
+  mysql connect statements at the bottom of demo_libs/config.php.
+
+Start by hitting http://apps.facebook.com/my_restaurant_app/index.php.
+You should see restaurants, but no ratings.  You and your friends can start adding ratings.
+
+---------------------------------------
+MIGRATING DATA FROM MYSQL TO THE FB DATA STORE API
+
+1. Run http://apps.facebook.com/my_restaurant_app/migrate/define_data.php
+
+  This sets up object and association types for your view of the data store API.
+
+2. Run http://apps.facebook.com/my_restaurant_app/migrate/migrate_data.php
+  This migrates the data from your mysql instance to your view of the data store API.
+  This should be done while logged in as the Facebook user who created the app, or as a 
+  developer of the app.  This can take a while, so the page may time out, but your PHP error logs
+  should receive messages showing you that the migration is taking place.
+3. Note that you should change permissions on library and migration code to be 
+  unviewable from the web after this is done.
+---------------------------------------
+
+TWEAKING APPLICATION FUNCTIONALITY 
+
+When playing with the application, use the flags in demo_libs/config.php.  
+Turning these on (any nonzero value) shows the addition of some advanced 
+features.  Specifically:
+
+* Setting $USE_JS adds a typeahead capability based on FBJS, allowing the
+  user to "search" for a restaurant instead of just click.
+
+* Setting $USE_AJAX adds a Mock Ajax-based rating capability, keeping the user 
+  on the restaurant page after rating, to easily check out what restaurants
+  friends are going to.
+
+* Setting $USE_DATA_API will switch from using a mysql-backed store to our
+  new Facebook-hosted data store.  Details of this API are at
+  http://wiki.developers.facebook.com/index.php/Data_Store_API_documentation
+  Remember, adding new restaurants/ratings while this is set will only make
+  changes to your FB Data Store stuff.  Likewise for mysql when unset.  
+
+---------------------------------
+
+This is just a small sampling of features available on the Facebook Platform.
+Enjoy!
